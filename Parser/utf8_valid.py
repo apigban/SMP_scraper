@@ -35,5 +35,4 @@ def csv_validator(csv_file_list):
 
 
 csv_list = file_walker()
-# print(csv_list)
 csv_validator(csv_list)
