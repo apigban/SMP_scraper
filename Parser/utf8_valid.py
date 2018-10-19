@@ -15,6 +15,13 @@ def file_walker():
 
 
 def csv_validator(csv_file_list):
+    """
+    Checks if csv_file in csv_file_list can be opened using utf-8 encoding.
+    A file that passed the check will have a "VALID" tag written to invalid.csv
+    A file that is encoded differently from utf-8 (did not pass) will have
+    an "INVALID" tag.
+    :param csv_file_list:
+    """
     for csv_file in csv_file_list:
         try:
             file = codecs.open(f'{file_dump_path}/{csv_file}', encoding='utf-8', errors='strict')
