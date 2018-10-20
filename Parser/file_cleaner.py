@@ -24,38 +24,6 @@ invalid_file_log = os.path.dirname(__file__) + '/log/invalid.txt'
 valid_file_log = os.path.dirname(__file__) + '/log/valid.txt'
 string_pattern = "\A\^FINANCIAL"
 
-
-def get_invalid_file():
-    """
-    Opens INvalid_file_log, converts the file to a csv.reader object and
-    reads all items from the object.
-    :return:
-    """
-    invalid_files_list = []
-
-    with open(invalid_file_log) as csv_file:
-        all_rows_obj = csv.reader(csv_file)
-        for row in all_rows_obj:
-            invalid_files_list.append(row[0])
-
-    return invalid_files_list
-
-
-def get_Valid_file():
-    """
-    Opens valid_file_log, converts the file to a csv.reader object and
-    reads all items from the object. Returns a valid_files_list.
-    :return:
-    """
-    valid_files_list = []
-
-    with open(valid_file_log) as csv_file:
-        all_rows_obj = csv.reader(csv_file)
-        for row in all_rows_obj:
-            valid_files_list.append(row[0])
-    return valid_files_list
-
-
 def delete_invalid_file(invalid_files_list):
     """
     Iterates through invalid_files_list to remove invalid files from data_path
@@ -105,12 +73,9 @@ if __name__ == '__main__':
 
     # Deletion Process for files that DIDN'T PASS the utf-8 encoding check
     invalid_file_log = os.path.dirname(__file__) + '/log/invalid.txt'
-    files_for_deletion = get_invalid_file()
-    delete_invalid_file(files_for_deletion)
 
     # Validation for files that PASSED the utf-8 encoding check
     valid_file_log = os.path.dirname(__file__) + '/log/valid.txt'
     string_pattern = "\A\^FINANCIAL"
-    preproc_valid_files(get_Valid_file(), len(get_Valid_file()))
 
     #print(all_files_from_dump)
