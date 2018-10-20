@@ -13,4 +13,8 @@ valid_file_list, invalid_file_list = utf8_validator.csv_validator()
 file_cleaner.delete_invalid_file(invalid_file_list)
 
 #   Pass valid file list to deletion function in file_cleaner module
-file_cleaner.preproc_valid_files(valid_file_list, len(valid_file_list))
+pre_processed_list = file_cleaner.preproc_valid_files(valid_file_list, len(valid_file_list))
+
+#   Delete files from dump that doesn't start with ^FINANCIAL
+for_removal = list(set(valid_file_list).difference(set(pre_processed_list)))
+file_cleaner.delete_invalid_file(for_removal)
