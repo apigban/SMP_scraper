@@ -1,6 +1,5 @@
 from Log import log
 from Parser import utf8_validator, file_cleaner
-
 # This module calls multiple modules from the Parser directory.
 
 #   Initialize Logger
