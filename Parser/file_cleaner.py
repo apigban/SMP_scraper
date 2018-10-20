@@ -32,7 +32,7 @@ def delete_invalid_file(invalid_files_list):
     """
     for invalid_file in invalid_files_list:
         try:
-            os.remove(f'{data_path}{invalid_file}')
+            os.remove(f'{data_path}/{invalid_file}')
             file_cleaner_log.info(f'{invalid_file} removed')
         except FileNotFoundError as FNFError:
             file_cleaner_log.error(f'{invalid_file} not found. Error: {FNFError}')
@@ -40,6 +40,15 @@ def delete_invalid_file(invalid_files_list):
 
 
 def preproc_valid_files(files_for_processing, valid_file_log_length):
+    """
+    On all files in dump_path, read first row
+    if first row doesn't match ^FINANACIAL log to file
+    else (means matched) append to pre_processed_list
+    return pre_processed_list
+    :param files_for_processing:
+    :param valid_file_log_length:
+    :return:
+    """
     valid_file_counter = 0
     invalid_file_counter = None
 
@@ -48,15 +57,17 @@ def preproc_valid_files(files_for_processing, valid_file_log_length):
     for valid_csv_file in files_for_processing:
         with open(f'{data_path}/{valid_csv_file}') as csv_file:
             all_row_obj = next(csv.reader(csv_file))
-
             for row in all_row_obj:
                 match = re.match(string_pattern, str(row))
+
                 if match is None:
                     file_cleaner_log.info(f'{valid_csv_file} contains non-financial data')
+
                 else:
                     file_cleaner_log.info(f'{valid_csv_file} is a valid csv file')
                     valid_file_counter += 1
                     pre_processed_list.append(f'{valid_csv_file}')
+
     file_cleaner_log.info(
         f'{valid_file_counter} pre-processed files. Files are checked if utf-8 encoded and starts with ^FINANCIAL.')
     file_cleaner_log.info(f'{valid_file_log_length - valid_file_counter} failed to pass pre-processing checks.')
