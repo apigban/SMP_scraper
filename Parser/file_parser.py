@@ -1,6 +1,6 @@
 import re, csv
 from Parser import utf8_validator
-
+import Log.log as log
 # TEST variable
 pre_processed_list = ['2712.csv', '2711.csv', '2708.csv', '2709.csv', '2714.csv', '2720.csv', '2723.csv', '2725.csv',
                       '2728.csv', '2733.csv', '2734.csv', '2737.csv', '2736.csv', '2741.csv', '2742.csv', '2743.csv',
@@ -81,11 +81,18 @@ data_path = utf8_validator.file_dump_path
 
 
 def regexer(row):
+    """
+    Matches financial sector data like "^FINANCIAL" and "^PSEI" with data in row,
+    for a successful match function returns 'sector'.
+    If row is stock data, meaning no match, like "\nAUB" or "\nTEL"return string(stock)
+    :param row:
+    :return:
+    """
     sector_pattern = r'\^\w+'
     stock_pattern = r'\n\w+'
 
     #   match for sector, Sector examples: ^FINANCIAL ^HOLDING ^INDUSTRIAL
-    sector_match = re.match(stock_pattern, row[0])
+    sector_match = re.match(sector_pattern, row[0])
 
     #    match for stock, Stock examples: \nAUB \nTEL
     stock_match = re.match(stock_pattern, row[0])
@@ -95,41 +102,38 @@ def regexer(row):
     return 'stock'
 
 
-def processor(pre_processed_list):
+# Call db_writer function
+def data_sorter(pre_processed_list):
+    """
+    Opens a csv file passed by the main_script.py, Calls regexer() to identify if a
+    row is Sector or Stock data.
+    If regexer returns 'sector', writes row to sector db
+    If regexer returns 'stock', writes row to stock db
+    :param row:
+    :return:
+    """
     for file in pre_processed_list:
-        with open(f'{data_path}/{file}') as raw_stock_records:
-            all_rows = csv.reader(raw_stock_records)
+
+        sector_counter = 0
+        stock_counter = 0
+
+        with open(f'{data_path}/{file}') as raw_csv_record:
+            all_rows = csv.reader(raw_csv_record)
+            parser_log.info(f'Parsing file {file}.')
             for row in all_rows:
-                print(row)
+                if regexer(row) == 'sector':
+                    #   Call Sector Class from models.py module
+                    #   Populate Instance Variables
+                    sector_counter += 1
+                    parser_log.info(f'Sector {row[0]} data found on {file}')
+                else:
+                    # Call Stock Class from models.py module
+                    # Populate Instance Variables
+                    stock_counter += 1
+                    parser_log.info(f'Stock {row[0]} data found on {file}')
+            parser_log.info(f'{file} parsed successfully.')
+            parser_log.info(f'STATISTICS for {file} : {sector_counter} sector data. {stock_counter} stock data.')
 
 
-#### ALL PSEUDOCODE
-#   Need regexer
-
-# for_regex = regexer(row)
-# sector_match =
-# stock _match True
-# if row starts with '^':
-#		log.info(f'found sectoral data for Sector {row[0]}')
-#			sector_data['name'] = row[0]
-#				sector_data['date'] = row[1]
-#					sector_data['open'] = row[2]#
-#					sector_data['high'] = row[3]
-#					sector_data['low'] = row[4]#
-#					sector_data['close'] = row[5]
-#				elif row starts with (\w+):#
-#					log.info(f'found stock data for Symbol {row[0]}')
-#					stock_data['symbol'] = row[0]
-#					stock_data['date'] = row[1]
-#					stock_data['open'] = row[2]
-##					stock_data['low'] = row[4]
-#					stock_data['close'] = row[5]
-#					stock_data['volume'] = row[6]
-#					stock_data['netforeign'] = row[7]
-
-# mydict = {rows[0]: rows[1] for rows in all_rows}
-# if row starts with '^':
-#		print('Sector ID Identified: ')
-#		print(f'{file}')
-# print(mydict)
-processor(pre_processed_list)
+parser_log = log.get_logger(__name__)
+data_sorter(pre_processed_list)
