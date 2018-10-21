@@ -1,5 +1,5 @@
 from Log import log
-from Parser import utf8_validator, file_cleaner
+from Parser import utf8_validator, file_cleaner, file_parser
 # This module calls multiple modules from the Parser directory.
 
 #   Initialize Logger
@@ -17,3 +17,6 @@ pre_processed_list = file_cleaner.preproc_valid_files(valid_file_list, len(valid
 #   Delete files from dump that doesn't start with ^FINANCIAL
 for_removal = list(set(valid_file_list).difference(set(pre_processed_list)))
 file_cleaner.delete_invalid_file(for_removal)
+
+#   Sort and write rows to appropriate table in DB
+file_parser.data_sorter(pre_processed_list)
