@@ -67,6 +67,6 @@ def db_commit_stock(row):
 
     session.add(row)
     session.commit()
-    db_logger.info(f'Commit Done. Stock: {row.name}    Trade date:  {row.trade_date} ')
+    db_logger.info(f'Commit Done. Stock: {row.symbol}    Trade date:  {row.trade_date} ')
     session.close()
     return row
