@@ -1,6 +1,7 @@
 #   Resource:
 #   https://stackoverflow.com/questions/7478403/sqlalchemy-classes-across-files/32358096
-from sqlalchemy import create_engine, Column, Integer, BigInteger, String, Date
+from sqlalchemy import Column, Integer, BigInteger, String, Date
+
 from Parser.db_base import Base
 
 
@@ -39,7 +40,6 @@ class Sector(Base):
         self.price_low = price_low
         self.price_close = price_close
         self.volume = volume
-
 
 class Stock(Base):
     ## Stock Data Class
