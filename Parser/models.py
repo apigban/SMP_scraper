@@ -49,7 +49,7 @@ class Stock(Base):
     #	Delimited:					AUB		03/31/2017	47.2	47.5	47.15	47.15	3000	0
     #	API data model 				symbol	date		open	high	low		close	bid	ask	volume	value	Netforeign
     #	CSV data model				symbol	date		open	high	low		close	!bid	!ask	volume	!value	Netforeign
-    #	Keys:						symbol	date		open	high	low		close	bid	ask	volume	value	Netforeign
+    #	Keys:						symbol	date		open	high	low		close	bid	ask	volume	value	Netforeign sector
 
     __tablename__ = 'stock'
 
@@ -62,7 +62,8 @@ class Stock(Base):
     price_close = Column('stock_price_close', Integer)
     volume = Column('stock_volume', BigInteger)
 
-    def __init__(self, symbol, trade_date, price_open, price_high, price_low, price_close, volume):
+    def __init__(self, stock_id, symbol, trade_date, price_open, price_high, price_low, price_close, volume):
+        self.stock_id = stock_id
         self.symbol = symbol
         self.trade_date = trade_date
         self.price_open = price_open

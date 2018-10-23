@@ -62,8 +62,9 @@ def db_commit_stock(row):
         price_low = row[4]
         price_close = row[5]
         volume = row[6]
+        stock_id = symbol + trade_date
 
-    row = models.Stock(symbol, trade_date, price_open, price_high, price_low, price_close, volume)
+    row = models.Stock(stock_id, symbol, trade_date, price_open, price_high, price_low, price_close, volume)
 
     session.add(row)
     session.commit()

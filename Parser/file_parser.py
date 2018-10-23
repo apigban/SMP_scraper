@@ -1,8 +1,10 @@
-import re, csv
-import Log.log as log
+import csv
+import re
 from datetime import datetime as dt
+
+import Log.log as log
 from Parser import utf8_validator
-from Parser.db_func import db_commit_sector, db_commit_stock
+from Parser.db_func import db_commit_stock
 
 data_path = utf8_validator.file_dump_path
 
@@ -89,26 +91,27 @@ def data_sorter(pre_processed_list):
         sector_counter = 0
         stock_counter = 0
 
+
         with open(f'{data_path}/{file}') as raw_csv_record:
             all_rows = csv.reader(raw_csv_record)
             parser_log.info(f'Parsing file {file}.')
 
+            sector_name = None
             for row in all_rows:
-
                 if regexer(row) == 'sector':
                     #   Perform type conversions
-                    row = to_date(to_centavo(to_integer(row[:-1])))
+                    # row = to_date(to_centavo(to_integer(row[:-1])))
 
                     #   Populate models.Sector Instance Variables
-                    db_commit_sector(row)
-                    sector_counter += 1
+                    # db_commit_sector(row)
+                    # sector_name = row[0]
+                    #sector_counter += 1
                     parser_log.info(f'Sector {row[0][1:]} data found on {file}')
 
                 else:
                     #   Perform type conversions
                     row = to_date(to_centavo(to_integer(row[:-1])))
-
-                    # Populate models.Stock Instance Variables
+                    #   Populate models.Stock Instance Variables
                     db_commit_stock(row)
                     stock_counter += 1
                     parser_log.info(f'Stock {row[0]} data found on {file}')
