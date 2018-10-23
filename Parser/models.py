@@ -53,7 +53,7 @@ class Stock(Base):
 
     __tablename__ = 'stock'
 
-    id = Column('stock_id', Integer, primary_key=True)
+    # id = Column('stock_id', Integer, primary_key=True)
     symbol = Column('stock_symbol', String(17))
     trade_date = Column('stock_date', Date)
     price_open = Column('stock_price_open', Integer)
@@ -61,6 +61,7 @@ class Stock(Base):
     price_low = Column('stock_price_low', Integer)
     price_close = Column('stock_price_close', Integer)
     volume = Column('stock_volume', BigInteger)
+    stock_id = Column('stock_id', String(20), primary_key=True)
 
     def __init__(self, stock_id, symbol, trade_date, price_open, price_high, price_low, price_close, volume):
         self.stock_id = stock_id

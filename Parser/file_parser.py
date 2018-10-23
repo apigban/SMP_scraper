@@ -112,9 +112,11 @@ def data_sorter(pre_processed_list):
                     #   Perform type conversions
                     row = to_date(to_centavo(to_integer(row[:-1])))
                     #   Populate models.Stock Instance Variables
-                    db_commit_stock(row)
-                    stock_counter += 1
-                    parser_log.info(f'Stock {row[0]} data found on {file}')
+                    if db_commit_stock(row) == 'duplicate':
+                        parser_log.info(f'Data for {row[0]} already in DB. Duplicate on {file}')
+                    else:
+                        stock_counter += 1
+                        parser_log.info(f'Stock {row[0]} data found on {file}')
 
             parser_log.info(f'{file} parsed successfully.')
             parser_log.info(f'STATISTICS for {file} : {sector_counter} sector data. {stock_counter} stock data.')
